@@ -7,7 +7,7 @@ x_variables = line.strip().split(',')
 for i,s in enumerate(x_variables):
 	s = s[s.find("[")+1:s.find("]")]
 	x_variables[i] = s
-
+print len(x_variables)
 row = [0] * len(x_variables)
 
 with open('xdata.csv', 'wb') as csvfile:
