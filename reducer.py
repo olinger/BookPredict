@@ -7,7 +7,7 @@ year_map = {}
 end_map = {}
 year_totals = {}
 
-X = 100
+X = 50
 index = 0
 #textin = open("googlebooks-eng-all-1gram-20120701-x",'r')
 for line in sys.stdin:
@@ -33,10 +33,13 @@ for line in sys.stdin:
 
     #map of each year to how many ngrams have occurred that year. 
     #use this to create ratio for each ngram in a given year
-    if year in year_totals:
-        year_totals[year] += occurrences
+    if year >= 1800: #filter out years before 1800 because there is not as much data
+        if year in year_totals:
+            year_totals[year] += occurrences
+        else:
+            year_totals[year] = occurrences
     else:
-        year_totals[year] = occurrences
+        continue
 
     #map each ngram occurrence within each year
     if year in year_map:
@@ -52,13 +55,14 @@ for line in sys.stdin:
 try:
     storei = 0
     sys.stderr.write("debug info: ngram_map size: %i\n" % len(ngram_map))
-    top_X_ngrams = [tup[0] for tup in sorted(ngram_map.items(), key=operator.itemgetter(1), reverse = True)[0:X]]
+    top_X_ngrams_map = sorted(ngram_map.items(), key=operator.itemgetter(1), reverse = True)[0:X]
+    top_X_ngrams = [tup[0] for tup in top_X_ngrams_map]
     sys.stderr.write("debug info: top_X_ngrams size: %i\n" % len(top_X_ngrams))
     if len(top_X_ngrams) > 0:
         for i in range(0, len(top_X_ngrams) - 1):
             storei = i
-            print "[%s]," % top_X_ngrams[i],
-        print "[%s]" % top_X_ngrams[-1]
+            print "[%s:%i]," % (top_X_ngrams_map[i][0], top_X_ngrams_map[i][1]),
+        print "[%s:%i]" % (top_X_ngrams_map[-1][0], top_X_ngrams_map[i][1])
 except IndexError, e:
     sys.stderr.write("NGRAMERROR: Index error at top_X_ngrams printing\n")
     sys.stderr.write("Length of top_X_ngrams is %i, i is %i\n" % (len(top_X_ngrams), storei))
