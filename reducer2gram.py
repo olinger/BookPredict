@@ -8,19 +8,22 @@ end_map = {}
 year_totals = {}
 
 X = 50
-index = 0
+#index = 0
 #textin = open("googlebooks-eng-all-1gram-20120701-x",'r')
-for line in sys.stdin:
-    sys.stderr.write("debug info: debugreducer - reading line %s, current index is %i\n", %line, index)
-    index+=1
-    if index == 100:
-        sys.stderr.write("debug info: debugreducer exiting after 100 lines read\n")
-        sys.exit(0)
+#textin = open("sample.txt")
+#print "test"
+#for line in sys.stdin:
+for line in sys.stdin: 
     line = line.strip().split('\t')
+ #   sys.stderr.write("%s")
+    #sys.stderr.write("debug info: debugreducer - reading line\n%s\ncurrent index is %i\n" % (line, index))
+  #  print line
     if len(line)!= 3:
         continue
     current_ngram, year, occurrences = line
-    sys.stderr.write("debug info: debugreducer : current_ngram, year, occurrences: %s, %s, %s\n" % (current_ngram, year, occurrences))
+  #  sys.stderr.write("debug info: debugreducer : current_ngram, year, occurrences: %s, %s, %s\n" % (current_ngram, year, occurrences))
+
+    #current_ngram = word1 + " " + word2
     try:
         year = int(year)
     except ValueError:
@@ -80,12 +83,14 @@ try:
         for ngram, occ in ngrams.iteritems():
             if ngram in top_X_ngrams:
                 ratio = float(occ) / float(year_totals[year])
+                if ratio < 0.0001: #ignore very small ratios
+                    continue
                 if year in end_map:
                     end_map[year][ngram] = ratio
                 else:
                     end_map[year] = {ngram : ratio}
 except IndexError, e:
-    sys.stderr.write("NGRAMERROR: Index error at end map creation")
+    sys.stderr.write("NGRAMERROR: Index error at end map creation\n")
     sys.stderr.write(e)
 
 try:
@@ -94,7 +99,7 @@ try:
         for ngram, ratio in end_map[year].iteritems():
             print "%s\t%f" % (ngram, ratio)
 except IndexError, e:
-    sys.stderr.write("NGRAMERROR: Index error at final print")
+    sys.stderr.write("NGRAMERROR: Index error at final print\n")
     sys.stderr.write(e)
 
-sys.stderr.write("debug info: reducer complete")
+sys.stderr.write("debug info: reducer complete\n")

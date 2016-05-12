@@ -23,7 +23,7 @@ def CleanWord(aword):
     # return the word
     return aword
 # Now we loop over lines in the system input
-#textin = open('googlebooks-eng-all-2gram-20120701-en', 'r')
+textin = open('googlebooks-eng-all-2gram-20120701-en', 'r')
 for line in sys.stdin:
     #sys.stderr.write("debug info: line: %s\n" % line)
     # Strip the line of whitespace and split into a list
