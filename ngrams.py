@@ -4,7 +4,7 @@ import csv
 import sys
 import glob
 
-#usage books_file_path x_var_text csv_to_output
+#usage books_file_path x_var_text csv_to_output N(gram)
 def CleanWord(aword):
     """
     Function input: A string which is meant to be
@@ -26,7 +26,11 @@ def CleanWord(aword):
     # return the word
 
     return aword
-
+if len(sys.argv) != 5:
+    print "Error - Parameters: books_file_path x_var_text csv_to_output N(gram)"
+    sys.exit(0)
+    
+n = int(sys.argv[4])
 xvarfile = open(sys.argv[2], 'r')
 x_variables = xvarfile.readline().strip().split('\t')
 freq = [0] * len(x_variables)
@@ -40,14 +44,19 @@ with open(sys.argv[3], 'w') as csvfile:
         title, year = name.split(".txt")[0].split("/")[1].split("-")
         input_file = open(name, 'r')
         input_text = input_file.read()
-        text_ngrams = ngrams(input_text.split(), 1)
+        text_ngrams = ngrams(input_text.split(), n)
         word_freq = {}
         total = 0
         for gram in text_ngrams:
         #    print gram
-            word = CleanWord(gram[0])
-            if word == None:
-                continue
+            word = ""
+            for i in range(0, n):
+                newWord = CleanWord(gram[i])
+                if newWord != None:
+                    word += CleanWord(gram[i])
+                    if i < n - 1:
+                        word += " "
+          #  print word
             total += 1
             #word = word1 + " " + word2
             if word in word_freq:

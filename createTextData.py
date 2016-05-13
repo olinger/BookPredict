@@ -2,6 +2,11 @@ import sys
 import csv
 all_lines = []
 years = []
+
+if(len(sys.argv) != 3):
+	print "Error - Parameters: input_csv output_txt"
+	sys.exit(0)
+#usage input_csv output_txt 
 with open(sys.argv[1]) as csvfile:
 	reader = csv.reader(csvfile)
 	next(reader)

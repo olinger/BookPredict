@@ -23,19 +23,20 @@ def CleanWord(aword):
     # return the word
     return aword
 # Now we loop over lines in the system input
-for line in sys.stdin:
+textin = open("googlebooks-eng-all-1gram-20120701-t", 'r')
+for line in textin:
     #sys.stderr.write("debug info: line: %s\n" % line)
     # Strip the line of whitespace and split into a list
     line = line.strip().split()
     # Get the year and the number of occurrences from
     # the ngram line
-    year = int(line[2])
-    occurrences = int(line[3])
+    year = int(line[1])
+    occurrences = int(line[2])
     #ignore years before 1800, not enough data
     if year < 1800:
         continue
     # Use CleanWord function to clean up the word
-    word = CleanWord(line[1])
+    word = CleanWord(line[0])
     #sys.stderr.write("debug info: word: %s\n" % word)
     # If CleanWord didn't return a string, move on
     if word == None:
@@ -43,4 +44,4 @@ for line in sys.stdin:
         continue
     # Print the output: word, year, and number of occurrences
     print '%s\t%s\t%s' % (word, year,occurrences)
-sys.stderr.write("debug info: mapper done\n")
+#sys.stderr.write("debug info: mapper done\n")
